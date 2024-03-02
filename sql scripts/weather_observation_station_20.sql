@@ -5,10 +5,10 @@ Query the median of the Northern Latitudes (LAT_N) from STATION and round your a
 
 with base as (
     select lat_n
-    , (row_number() over (order by lat_n))-1 ranker
+    , row_number() over (order by lat_n) ranker
     from station
 )
 select round(avg(lat_n),4)
 from base b
-where b.ranker = (select floor(max(ranker)/2) from base) or b.ranker = (select ceiling(max(ranker)/2) from base)
+where b.ranker = (select floor((max(ranker)+1)/2) from base) or b.ranker = (select ceiling((max(ranker)+1)/2) from base)
 ;
